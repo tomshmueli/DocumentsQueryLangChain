@@ -16,7 +16,7 @@ This project demonstrates how to set up and use a Retrieval-Augmented Generation
 
 ### General Prerequisites
 1. Ensure you have Python3 installed. It's recommended to use a virtual environment for this project.
-
+2. Ensure you have an open ai API key.
 ## Setup
 
 1. **Extract files** 
