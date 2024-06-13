@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
-from create_database import OPENAI_KEY, CHROMA_PATH
+from create_database import OPENAI_KEY, CHROMA_PATH, generate_data_store
 import uvicorn
 import os
 
@@ -62,4 +62,5 @@ def ask_question(question: Question):
     return formatted_response
 
 if __name__ == "__main__":
+    generate_data_store()
     uvicorn.run(app, host="127.0.0.1", port=5500)

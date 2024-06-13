@@ -25,6 +25,8 @@ def main():
     query_text = args.query_text # get the query text from the arguments
 
     # Prepare the DB.
+    if OPENAI_KEY[:2] is not "sk":
+        raise ValueError("The OpenAI API key is not set in the environment variables.")
     embedding_function = OpenAIEmbeddings(openai_api_key=OPENAI_KEY) # create an instance of OpenAIEmbeddings
     try:
         db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function)
@@ -34,7 +36,7 @@ def main():
 
     # Search the DB.
     results = db.similarity_search_with_relevance_scores(query_text, k=3) # search the database for the query text and get the top 3 results
-    if len(results) == 0 or results[0][1] < 0.7: # if there are no results or the top result has a score less than 0.7
+    if len(results) == 0 or results[0][1] < 0.6: # if there are no results or the top result has a score less than 0.7
         print(f"Unable to find matching results.")
         return
 
