@@ -1,6 +1,6 @@
 # from langchain.document_loaders import DirectoryLoader
 from langchain_community.document_loaders import UnstructuredWordDocumentLoader
-from langchain.document_loaders import DirectoryLoader
+from langchain_community.document_loaders import DirectoryLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema import Document
 # from langchain.embeddings import OpenAIEmbeddings
@@ -46,8 +46,8 @@ def load_documents():
 def split_text(documents: list[Document]):
     """ Split the text into chunks for processing each chunk separately."""
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=300,
-        chunk_overlap=100,
+        chunk_size=400,
+        chunk_overlap=200,
         length_function=len,
         add_start_index=True,
     )

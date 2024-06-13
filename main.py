@@ -1,10 +1,12 @@
 from fastapi import FastAPI, HTTPException
-import uvicorn
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from create_database import OPENAI_KEY, CHROMA_PATH
+import uvicorn
+import os
 
 app = FastAPI()
 
@@ -32,6 +34,11 @@ Answer the question based on the above context: {question}
 class Question(BaseModel):
     question: str
 
+@app.get("/", response_class=HTMLResponse)
+async def read_root():
+    with open("index.html", "r") as file:
+        return HTMLResponse(content=file.read(), status_code=200)
+
 @app.post("/ask")
 def ask_question(question: Question):
     query_text = question.question
@@ -55,4 +62,4 @@ def ask_question(question: Question):
     return formatted_response
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=5500)
