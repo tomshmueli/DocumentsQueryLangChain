@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask Our Documents</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .container h1 {
+            text-align: center;
+        }
+        .container input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .container button {
+            padding: 10px 20px;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+        .container .response {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ask My Doc</h1>
+        <input type="text" id="question" placeholder="Enter your question here">
+        <button onclick="askQuestion()">Ask</button>
+        <div class="response" id="response"></div>
+    </div>
+
+    <script>
+        async function askQuestion() {
+            const question = document.getElementById("question").value;
+            const responseDiv = document.getElementById("response");
+
+            if (!question) {
+                responseDiv.textContent = "Please enter a question.";
+                return;
+            }
+
+            try {
+                const response = await fetch("http://127.0.0.1:8000/ask", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ question })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    responseDiv.innerHTML = `<p><strong>Response:</strong> ${data.response}</p><p><strong>Sources:</strong> ${data.sources.join(", ")}</p>`;
+                } else {
+                    const error = await response.json();
+                    responseDiv.textContent = `Error: ${error.detail}`;
+                }
+            } catch (error) {
+                responseDiv.textContent = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
